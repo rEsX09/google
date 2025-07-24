@@ -2,6 +2,10 @@ from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return 'Ej uz <a href="/google-auth/">Google Auth</a>'
+
 @app.route('/google-auth/', methods=['GET', 'POST'])
 def google_auth():
     message = None
@@ -23,3 +27,4 @@ def google_auth():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
+
