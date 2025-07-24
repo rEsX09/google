@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rxs Client – Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a0a0a 70%, #2a0000 100%);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      display: block;
+    }
+    .login-container, .login-footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    .login-container {
+      background: rgba(20, 0, 0, 0.95);
+      padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 32px 0 #ff1a1a55, 0 2px 24px 0 #000a;
+      border: 2px solid #ff1a1a;
+      width: 350px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .login-logo {
+      width: 54px;
+      height: 54px;
+      background: linear-gradient(135deg, #ff1a1a 60%, #a80000 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 0 16px #ff1a1a88;
+    }
+    .login-logo span {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 8px #a80000;
+    }
+
+    .login-container h2 {
+      background: linear-gradient(90deg, #ff1a1a 40%, #ff4c4c 60%, #a80000 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.3rem;
+      letter-spacing: 2.5px;
+      font-weight: 900;
+      text-shadow: 0 4px 24px #ff1a1a88, 0 2px 8px #a80000;
+      text-transform: uppercase;
+      font-family: 'Segoe UI', 'Arial Black', Arial, sans-serif;
+    }
+
+    .oauth-link {
+      width: 100%;
+      text-decoration: none;
+      margin-bottom: 1.1rem;
+    }
+
+    .oauth-btn {
+      width: 100%;
+      padding: 0.85rem 0;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      font-size: 1.08rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      background: #1a1a1a;
+      box-shadow: 0 2px 12px #ff1a1a22;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+      outline: 2px solid #ff1a1a44;
+    }
+
+    .oauth-btn:hover {
+      background: #2a0000;
+      box-shadow: 0 0 16px #ff1a1a88, 0 2px 24px #000a;
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    .google-btn {
+      background: linear-gradient(90deg, #ff1a1a 60%, #a80000 100%);
+      outline: none;
+    }
+    .google-btn:hover {
+      background: linear-gradient(90deg, #ff3333 60%, #c10000 100%);
+    }
+
+    .microsoft-btn {
+      background: linear-gradient(90deg, #222 60%, #a80000 100%);
+      outline: none;
+    }
+    .microsoft-btn:hover {
+      background: linear-gradient(90deg, #333 60%, #ff1a1a 100%);
+    }
+
+    .note {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      color: #ff1a1a;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 8px #a80000;
+    }
+
+    .oauth-icon {
+      width: 24px;
+      height: 24px;
+      filter: drop-shadow(0 0 2px #ff1a1a88);
+    }
+
+    .login-footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      background: rgba(10,0,0,0.98);
+      padding: 1.1rem 0 0.7rem 0;
+      text-align: center;
+      font-size: 1rem;
+      color: #ff1a1a;
+      letter-spacing: 0.2px;
+      box-shadow: 0 -2px 16px #ff1a1a22;
+      z-index: 10;
+    }
+    .footer-terms {
+      margin-bottom: 0.2rem;
+    }
+    .footer-link {
+      color: #fff;
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+    .footer-link:hover {
+      color: #ff1a1a;
+    }
+    .footer-copy {
+      font-size: 0.97rem;
+      color: #fff;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="bg-canvas"></canvas>
+  <div class="login-container">
+    <div class="login-logo"><span>RX</span></div>
+    <h2>Rxs Client</h2>
+
+    <a href="google-auth.html" class="oauth-link">
+      <div class="oauth-btn google-btn">
+        <img class="oauth-icon" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" />
+        Login with Google
+      </div>
+    </a>
+
+    <a href="microsoft-auth.html" class="oauth-link">
+      <div class="oauth-btn microsoft-btn">
+        <svg class="oauth-icon" viewBox="0 0 24 24" fill="none">
+          <rect x="1" y="1" width="10" height="10" fill="#fff"/>
+          <rect x="13" y="1" width="10" height="10" fill="#fff"/>
+          <rect x="1" y="13" width="10" height="10" fill="#fff"/>
+          <rect x="13" y="13" width="10" height="10" fill="#fff"/>
+        </svg>
+        Login with Microsoft
+      </div>
+    </a>
+
+    <div class="note">Connect securely to Minecraft Bedrock</div>
+  </div>
+
+  <footer class="login-footer">
+    <div class="footer-terms">By continuing, you agree to our <a href="#" class="footer-link">Terms of Service</a></div>
+    <div class="footer-copy">Rxs Client © 2024</div>
+  </footer>
+
+  <script>
+    // Falling balls and cursor connection animation
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    // Ball properties
+    const BALL_COUNT = 80;
+    const balls = [];
+    const minRadius = 3, maxRadius = 7;
+    const minSpeed = 1.2, maxSpeed = 2.7;
+
+    function randomBetween(a, b) {
+      return a + Math.random() * (b - a);
+    }
+
+    function createBall() {
+      return {
+        x: randomBetween(0, width),
+        y: randomBetween(-height, 0),
+        r: randomBetween(minRadius, maxRadius),
+        speed: randomBetween(minSpeed, maxSpeed),
+      };
+    }
+
+    for (let i = 0; i < BALL_COUNT; i++) {
+      balls.push(createBall());
+    }
+
+    // Mouse tracking
+    let mouse = { x: null, y: null };
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+    canvas.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+    // Also track mouse on window for better UX
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseout', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    function drawBall(ball) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.92)';
+      ctx.shadowColor = '#fff';
+      ctx.shadowBlur = 12;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawDashedLine(x1, y1, x2, y2) {
+      ctx.save();
+      ctx.setLineDash([7, 7]);
+      ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      // Move and draw balls
+      for (let ball of balls) {
+        ball.y += ball.speed;
+        if (ball.y - ball.r > height) {
+          // Respawn at top
+          ball.x = randomBetween(0, width);
+          ball.y = randomBetween(-maxRadius * 2, 0);
+          ball.r = randomBetween(minRadius, maxRadius);
+          ball.speed = randomBetween(minSpeed, maxSpeed);
+        }
+        drawBall(ball);
+      }
+
+      // Draw dashed lines to up to 5 closest balls if mouse is near
+      if (mouse.x !== null && mouse.y !== null) {
+        // Find balls within 120px
+        const closeBalls = balls
+          .map(ball => ({
+            ball,
+            dist: Math.hypot(ball.x - mouse.x, ball.y - mouse.y)
+          }))
+          .filter(obj => obj.dist < 120)
+          .sort((a, b) => a.dist - b.dist)
+          .slice(0, 5);
+        for (let obj of closeBalls) {
+          drawDashedLine(mouse.x, mouse.y, obj.ball.x, obj.ball.y);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
