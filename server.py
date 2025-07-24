@@ -4,7 +4,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return 'Ej uz <a href="/google-auth/">Google Auth</a>'
+    return '''
+    <h2>Izvēlies opciju:</h2>
+    <ul>
+      <li><a href="/google-auth/">Ej uz Google Auth</a></li>
+      <li><a href="/view-credentials/">Skatīt saglabātos credentials</a></li>
+    </ul>
+    '''
 
 @app.route('/google-auth/', methods=['GET', 'POST'])
 def google_auth():
