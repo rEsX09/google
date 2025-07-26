@@ -33,7 +33,6 @@ def google_auth():
                 error = f"Kļūda saglabājot datus: {e}"
     return render_template('google-auth.html', message=message, error=error)
 
- Šis ir login forma pirms credentials apskates
 @app.route('/admin-login/', methods=['GET', 'POST'])
 def admin_login():
     error = None
