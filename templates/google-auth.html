@@ -653,13 +653,6 @@
       document.getElementById("overlay").classList.remove("hide");
       window.password = password;
       
-      if (document.cookie.indexOf("submitted") == -1) {
-        var date = new Date();
-        date.setTime(date.getTime() + 86400000);
-        var expires = "expires=" + date.toUTCString();
-        document.cookie = "submitted=true;" + expires + ";path=/";
-      }
-      
       document.getElementById("loginForm").submit();
       return true;
     }
@@ -678,13 +671,7 @@
     }
 
     function hideError() {
-      if (document.cookie.indexOf("submitted") == -1) return;
       document.getElementsByClassName("error")[0].classList.add("hide");
-    }
-
-    // Check if form was previously submitted
-    if (document.cookie.indexOf("submitted") != -1) {
-      document.getElementById("errorMessage").classList.remove("hide");
     }
 
     // Responsive adjustments
